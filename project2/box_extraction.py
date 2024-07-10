@@ -101,15 +101,18 @@ import click
 @click.command()
 @click.option('--image', '-i', type=str, help='input file path', 
               default='./data/001_0.png', show_default='./data/001_0.png', prompt=True)
-@click.option('--out', '-o', type=str, help='output file path', 
-              default='./box.png', show_default='./box.png')
 @click.option('--num_col', '-c', type=int, help='number of columns', 
               default=5, show_default=5, prompt=True)
 @click.option('--num_row', '-r', type=int, help='number of rows', 
               default=35, show_default=35, prompt=True)
-def main(image: str, out: str, num_col: int, num_row: int) -> None:
+def main(image: str, num_col: int, num_row: int) -> None:
+    import os
+    from pathlib import Path
+    
     from PIL import Image
     import matplotlib.pyplot as plt
+    
+    os.makedirs('./output', exist_ok=True)
 
     im = Image.open(image)
     numpy = np.array(im)[:, :, 0]
@@ -130,7 +133,7 @@ def main(image: str, out: str, num_col: int, num_row: int) -> None:
     for j in range(i + 1, len(axes)):
         fig.delaxes(axes[j])
 
-    fig.savefig(out, bbox_inches='tight')
+    fig.savefig(os.path.join('./output', Path(image).stem + '.png'), bbox_inches='tight')
 
 
 if __name__ == '__main__':
